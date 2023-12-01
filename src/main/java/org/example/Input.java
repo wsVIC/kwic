@@ -1,7 +1,12 @@
 package org.example;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.GetResponse;
+
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -94,14 +99,9 @@ public class Input {
 
     public void getInputFromTerm() {
         Scanner scan = new Scanner(System.in);
-        boolean end = false;
-        while (!end) {
+        while (scan.hasNext()) {
             String line = scan.nextLine();
-            if ("exit".equals(line)) {
-                end = true;
-            } else {
-                this.inputLines.add(line);
-            }
+            inputLines.add(line);
         }
         scan.close();
     }
@@ -126,7 +126,7 @@ public class Input {
 
             String url = "jdbc:mysql://localhost:3306/db1";
             String user = "root";
-            String password = "rootDB";
+            String password = "wsdd201512";
 
             conn = DriverManager.getConnection(url, user, password);
 
@@ -157,8 +157,31 @@ public class Input {
 
     }
 
-    public void getInputFromMidWare() {
+    public void getInputFromMidWare() throws IOException, TimeoutException {
+        final String QUEUE_NAME = "text";
+        ConnectionFactory factory;
+        Channel channel;
+        com.rabbitmq.client.Connection connection;
+        factory = new ConnectionFactory();
+        factory.setHost("localhost");
+        connection = factory.newConnection();
+        channel = connection.createChannel();
+        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
+        GetResponse response;
+        long deliveryTag;
+        do {
+            response = channel.basicGet(QUEUE_NAME, false);
+            if(response == null){
+                channel.close();
+                connection.close();
+            }
+            else{
+                inputLines.add(new String(response.getBody(), StandardCharsets.UTF_8));
+                deliveryTag  = response.getEnvelope().getDeliveryTag();
+                channel.basicAck(deliveryTag, false);
+            }
+        } while (response != null);
     }
 
 

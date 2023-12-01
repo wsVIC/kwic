@@ -1,0 +1,11 @@
+create table table1(text varchar(255));
+insert into table1(text) values("The quick brown fox jumps over the lazy dog");
+insert into table1(text) values("My friend Bob loves to play basketball");
+insert into table1(text) values("In the summer, we like to go swimming");
+insert into table1(text) values("Reading books is a good way to gain knowledge");
+insert into table1(text) values("She sells seashells by the seashore");
+insert into table1(text) values("I love to travel and explore new places");
+insert into table1(text) values("Keep your friends close and your enemies closer");
+insert into table1(text) values("To be or not to be, that is the question");
+insert into table1(text) values("A journey of a thousand miles begins with a single step");
+insert into table1(text) values("Do not count your chickens before they are hatched");

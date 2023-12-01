@@ -10,10 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 public class SocketSender {
-    private final static String QUEUE_NAME = "text";
-
     public static void main(String[] args)  {
-
         try {
             ServerSocket serverSocket  = new ServerSocket(8000);
             Socket clientSocket = serverSocket.accept();
@@ -28,8 +25,5 @@ public class SocketSender {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
     }
 }
